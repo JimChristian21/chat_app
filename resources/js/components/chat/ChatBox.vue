@@ -10,9 +10,9 @@ const props = defineProps({
 
 <template>
     <div class="bg-slate-300 w-4/5 h-full flex flex-col">
-        <div v-if="user">
+        <div v-if="props.user">
             <div class="font-bold pl-5 border border-bottom-2">
-                {{ user.name }} ({{ user.email }})
+                {{ props.user.name }} ({{ props.user.email }})
             </div>
             <div class="h-full">
                 Body

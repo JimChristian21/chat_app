@@ -33,7 +33,7 @@ const setUser = (selectedUser) => {
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="w-full h-full flex flex-row">
-                <ChatList :users="users" @selected-user="(selected_user) => setUser(selected_user)"/>
+                <ChatList :users="props.users" @selected-user="(selected_user) => setUser(selected_user)"/>
                 <ChatBox :user="user"/>
             </div>
         </div>
