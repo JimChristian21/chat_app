@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Input from '../ui/input/Input.vue';
 import Button from '../ui/button/Button.vue';
 const props = defineProps({
