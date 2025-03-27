@@ -3,6 +3,17 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import PlaceholderPattern from '../components/PlaceholderPattern.vue';
+import ChatBox from '@/components/chat/ChatBox.vue';
+import ChatList from '@/components/chat/ChatList.vue';
+import { ref } from 'vue';
+
+const props = defineProps({
+    users: {
+        type: Object
+    }
+});
+
+const user = ref(null);
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -10,6 +21,10 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/dashboard',
     },
 ];
+
+const setUser = (selectedUser) => {
+    user.value = selectedUser;
+}
 </script>
 
 <template>
@@ -17,19 +32,9 @@ const breadcrumbs: BreadcrumbItem[] = [
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-            <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <PlaceholderPattern />
-                </div>
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <PlaceholderPattern />
-                </div>
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <PlaceholderPattern />
-                </div>
-            </div>
-            <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min">
-                <PlaceholderPattern />
+            <div class="w-full h-full flex flex-row">
+                <ChatList :users="users" @selected-user="(selected_user) => setUser(selected_user)"/>
+                <ChatBox :user="user"/>
             </div>
         </div>
     </AppLayout>
