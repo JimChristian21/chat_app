@@ -34,7 +34,7 @@ const submit = () => {
                 {{ props.receiver.name }} ({{ props.receiver.email }})
             </div>
             <div class="h-full flex flex-col">
-                <template v-for="message in props.messages">
+                <template v-for="message in props.messages" :key="message.id">
                     <div :class="[message.sender_id == $page.props.auth.user.id ? 'text-end' : 'text-start']">
                         {{ message.message }}
                     </div>
