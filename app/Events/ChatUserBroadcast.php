@@ -30,7 +30,14 @@ class ChatUserBroadcast implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('chat.' . $this->message->receiver_id . '_' . $this->message->sender_id),
+            new Channel('chat.1'),
+        ];
+    }
+
+    public function broadcastWith(): array
+    {
+        return [
+            'message' => $this->message
         ];
     }
 }

@@ -16,6 +16,8 @@ const props = defineProps({
 
 const page = usePage();
 const message = ref('');
+const user_messages = ref(props.messages);
+
 const submit = () => {
     router.visit(route('chat.store', props.receiver.id), {
         method: 'post',
@@ -29,11 +31,16 @@ const submit = () => {
 }
 
 onMounted(() => {
-    Echo.private('chat.' + props.receiver.id + '_' + page.props.auth.user.id)
+    console.log(user_messages.value);
+    Echo.channel('chat.1')
         .listen('ChatUserBroadcast', (e) => {
-            console.log(e);
+            pushMessage(e.message);
         });
 })
+
+const pushMessage = (message) => {
+    user_messages.value.push(message);
+}
 
 </script>
 
@@ -44,7 +51,7 @@ onMounted(() => {
                 {{ props.receiver.name }} ({{ props.receiver.email }})
             </div>
             <div class="h-full flex flex-col">
-                <template v-for="message in props.messages" :key="message.id">
+                <template v-for="message in user_messages" :key="message.id">
                     <div :class="[message.sender_id == $page.props.auth.user.id ? 'text-end' : 'text-start']">
                         {{ message.message }}
                     </div>

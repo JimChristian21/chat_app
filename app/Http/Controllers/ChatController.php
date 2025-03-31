@@ -40,7 +40,7 @@ class ChatController extends Controller
         return Inertia::render('Dashboard', [
             'users' => User::where('id', '!=', auth()->user()->id)->get(),
             'receiver' => User::where('id', '=', $receiver_id)->get()[0],
-            'messages' => Message::where(function($query) use ($request, $receiver_id) {
+            'messages' => (array) Message::where(function($query) use ($request, $receiver_id) {
                 $query->where('sender_id', '=', $request->user()->id)
                     ->where('receiver_id', '=', $receiver_id);
             })->orWhere(function( Builder $query) use ($request, $receiver_id) {
