@@ -2,7 +2,9 @@
 import Input from '../ui/input/Input.vue';
 import Button from '../ui/button/Button.vue';
 import { router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+
 const props = defineProps({
     receiver: {
         type: [null, Object]
@@ -12,6 +14,7 @@ const props = defineProps({
     }
 });
 
+const page = usePage();
 const message = ref('');
 const submit = () => {
     router.visit(route('chat.store', props.receiver.id), {
@@ -24,6 +27,13 @@ const submit = () => {
         onSuccess: () => message.value = ''
     });
 }
+
+onMounted(() => {
+    Echo.private('chat.' + props.receiver.id + '_' + page.props.auth.user.id)
+        .listen('ChatUserBroadcast', (e) => {
+            console.log(e);
+        });
+})
 
 </script>
 

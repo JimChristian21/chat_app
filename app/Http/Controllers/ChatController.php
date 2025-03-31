@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ChatUserBroadcast;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -33,6 +34,8 @@ class ChatController extends Controller
             'receiver_id' => $receiver_id,
             'message' => $request->message
         ]);
+
+        ChatUserBroadcast::dispatch($created_message);
         
         return Inertia::render('Dashboard', [
             'users' => User::where('id', '!=', auth()->user()->id)->get(),
