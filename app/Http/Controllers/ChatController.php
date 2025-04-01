@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ChatTyping;
 use App\Events\ChatUserBroadcast;
 use App\Models\Message;
 use App\Models\User;
@@ -36,6 +37,7 @@ class ChatController extends Controller
         ]);
 
         ChatUserBroadcast::dispatch($created_message);
+        ChatTyping::dispatch(false, $receiver_id);
         
         return Inertia::render('Dashboard', [
             'users' => User::where('id', '!=', auth()->user()->id)->get(),
@@ -49,5 +51,12 @@ class ChatController extends Controller
             })->orderBy('created_at')
             ->get()
         ]);
+    }
+
+    public function typing(Request $request, int $id)
+    {
+        ChatTyping::dispatch($request->get('typing'), $id);
+
+        return redirect()->route('chat.get', $id);
     }
 }

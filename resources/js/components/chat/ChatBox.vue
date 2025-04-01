@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Input from '../ui/input/Input.vue';
 import Button from '../ui/button/Button.vue';
+import { useDebounceFn } from '@vueuse/core';
 import { router } from '@inertiajs/vue3';
 import { onMounted, ref } from 'vue';
 import { usePage } from '@inertiajs/vue3';
@@ -16,6 +17,8 @@ const props = defineProps({
 
 const page = usePage();
 const message = ref('');
+const isTyping = ref(false);
+const typingUserId = ref(null);
 const user_messages = ref(props.messages);
 
 const submit = () => {
@@ -28,19 +31,35 @@ const submit = () => {
         preserveScroll: true,
         onSuccess: () => message.value = ''
     });
+
+    isTyping.value = false;
 }
 
 onMounted(() => {
-    console.log(user_messages.value);
     Echo.channel('chat.1')
         .listen('ChatUserBroadcast', (e) => {
             pushMessage(e.message);
+        })
+        .listen('ChatTyping', (e) => {
+            isTyping.value = e.typing;
+            typingUserId.value = e.receiver_id;
         });
 })
 
 const pushMessage = (message) => {
     user_messages.value.push(message);
 }
+
+const typing = useDebounceFn(() => {
+    router.visit(route('chat.typing', props.receiver.id), {
+        method: 'patch',
+        data: {
+            typing: message.value.length ? true : false
+        },
+        preserveState: true,
+        preserveScroll: true
+    });
+}, 500);
 
 </script>
 
@@ -56,9 +75,12 @@ const pushMessage = (message) => {
                         {{ message.message }}
                     </div>
                 </template>
+                <div v-if="isTyping && $page.props.auth.user.id == typingUserId" class="text-start text-slate-500">
+                    Typing...
+                </div>
             </div>
             <div class="flex gap-1 p-2">
-                <Input v-model="message"/>
+                <Input v-model="message" @input="typing()"/>
                 <Button class="bg-slate-500" @click="submit()">Send</Button>
             </div>
         </div>
