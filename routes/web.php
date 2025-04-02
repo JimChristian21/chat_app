@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PeopleController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -15,6 +16,8 @@ Route::get('chat/{id}', [ChatController::class, 'get'])->middleware(['auth'])->n
 Route::post('chat/{id}', [ChatController::class, 'store'])->middleware(['auth'])->name('chat.store');
 
 Route::patch('chat/typing/{id}', [ChatController::class, 'typing'])->middleware(['auth'])->name('chat.typing');
+
+Route::get('/people', [PeopleController::class, 'index'])->name('people.index');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
