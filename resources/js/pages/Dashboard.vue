@@ -29,7 +29,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 const setUser = (selectedUser) => {
     router.visit(route('chat.get', selectedUser.id), {
         method: 'get',
-        preserveState: true,
         preserveScroll: true
     });
 }
