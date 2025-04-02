@@ -35,9 +35,14 @@ class ChatController extends Controller
             'receiver_id' => $receiver_id,
             'message' => $request->message
         ]);
+        $chat_typing_data = (object) [
+            'sender_id' => auth()->user()->id,
+            'receiver_id' => $receiver_id,
+            'is_typing' => FALSE,
+        ];
 
         ChatUserBroadcast::dispatch($created_message);
-        ChatTyping::dispatch(false, $receiver_id);
+        ChatTyping::dispatch($chat_typing_data);
         
         return Inertia::render('Dashboard', [
             'users' => User::where('id', '!=', auth()->user()->id)->get(),
@@ -55,7 +60,13 @@ class ChatController extends Controller
 
     public function typing(Request $request, int $id)
     {
-        ChatTyping::dispatch($request->get('typing'), $id);
+        $data = (object) [
+            'sender_id' => auth()->user()->id,
+            'receiver_id' => $id,
+            'is_typing' => $request->get('typing'),
+        ];
+
+        ChatTyping::dispatch($data);
 
         return redirect()->route('chat.get', $id);
     }

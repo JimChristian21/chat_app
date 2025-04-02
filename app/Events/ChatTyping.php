@@ -17,7 +17,7 @@ class ChatTyping implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(public bool $is_typing, public int $receiver_id)
+    public function __construct(public object $data)
     {
         //
     }
@@ -30,15 +30,15 @@ class ChatTyping implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('chat.1'),
+            new Channel('chat.' . $this->data->sender_id  . '_' .  $this->data->receiver_id),
         ];
     }
 
     public function broadcastWith()
     {
         return [
-            'typing' => $this->is_typing,
-            'receiver_id' => $this->receiver_id
+            'typing' => $this->data->is_typing,
+            'receiver_id' => $this->data->receiver_id
         ];
     }
 }

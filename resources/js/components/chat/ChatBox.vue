@@ -36,7 +36,7 @@ const submit = () => {
 }
 
 onMounted(() => {
-    Echo.channel('chat.1')
+    Echo.channel('chat.' + props.receiver.id + '_' + page.props.auth.user.id)
         .listen('ChatUserBroadcast', (e) => {
             pushMessage(e.message);
         })
