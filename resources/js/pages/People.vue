@@ -25,7 +25,7 @@ const breadcrumbs: BreadcrumbItem[] = [
             <div class="flex flex-row">
                 <template v-for="user in props.users">
                     <div class="w-1/4 h-full flex flex-row">
-                        TEST
+                        {{ user.name }}
                     </div>
                 </template>
             </div>
