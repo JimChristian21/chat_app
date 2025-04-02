@@ -36,14 +36,17 @@ const submit = () => {
 }
 
 onMounted(() => {
-    Echo.channel('chat.' + props.receiver.id + '_' + page.props.auth.user.id)
-        .listen('ChatUserBroadcast', (e) => {
-            pushMessage(e.message);
-        })
-        .listen('ChatTyping', (e) => {
-            isTyping.value = e.typing;
-            typingUserId.value = e.receiver_id;
-        });
+
+    if (props.receiver) {
+        Echo.channel('chat.' + props.receiver.id + '_' + page.props.auth.user.id)
+            .listen('ChatUserBroadcast', (e) => {
+                pushMessage(e.message);
+            })
+            .listen('ChatTyping', (e) => {
+                isTyping.value = e.typing;
+                typingUserId.value = e.receiver_id;
+            });
+    }
 })
 
 const pushMessage = (message) => {
