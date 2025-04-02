@@ -23,7 +23,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="flex flex-row">
-                <template v-for="user in props.users">
+                <template v-for="user in props.users" :key="user.id">
                     <div class="w-1/4 h-full flex flex-row">
                         {{ user.name }}
                     </div>
